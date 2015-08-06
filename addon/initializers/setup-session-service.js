@@ -1,3 +1,5 @@
+import ENV from '../config/environment';
+
 export default function setupSessionStore(registry) {
-  registry.injection('service:session', 'session', 'simple-auth-session:main');
+  registry.injection('service:session', 'session', ENV['simple-auth'].base.session);
 }
