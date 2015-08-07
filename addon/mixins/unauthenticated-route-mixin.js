@@ -40,7 +40,7 @@ export default Ember.Mixin.create({
   */
   beforeModel(transition) {
     // TODO: this should return a potential return value from _super
-    const sessionService = this.container.lookup('service:session');
+    const sessionService = this.container.lookup(Configuration.base.sessionService);
     if (sessionService.get('isAuthenticated')) {
       transition.abort();
       Ember.assert('The route configured as Configuration.routeIfAlreadyAuthenticated cannot implement the UnauthenticatedRouteMixin mixin as that leads to an infinite transitioning loop!', this.get('routeName') !== Configuration.base.routeIfAlreadyAuthenticated);

@@ -43,7 +43,7 @@ export default Ember.Mixin.create({
     @private
   */
   _mapSessionEventsToActions: Ember.on('init', function() {
-    const sessionService = this.container.lookup('service:session');
+    const sessionService = this.container.lookup(Configuration.base.sessionService);
     Ember.A([
       'sessionAuthenticationSucceeded',
       'sessionAuthenticationFailed',
@@ -70,7 +70,7 @@ export default Ember.Mixin.create({
     @public
   */
   sessionAuthenticationSucceeded() {
-    const sessionService = this.container.lookup('service:session');
+    const sessionService = this.container.lookup(Configuration.base.sessionService);
     let attemptedTransition = sessionService.get('attemptedTransition');
     if (attemptedTransition) {
       attemptedTransition.retry();
@@ -149,7 +149,7 @@ export default Ember.Mixin.create({
     @public
   */
   authorizationFailed() {
-    const sessionService = this.container.lookup('service:session');
+    const sessionService = this.container.lookup(Configuration.base.sessionService);
     if (sessionService.get('isAuthenticated')) {
       sessionService.invalidate();
     }

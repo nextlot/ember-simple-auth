@@ -43,7 +43,7 @@ export default Ember.Mixin.create({
     @public
   */
   beforeModel(transition) {
-    const sessionService = this.container.lookup('service:session');
+    const sessionService = this.container.lookup(Configuration.base.sessionService);
     let superResult = this._super(transition);
 
     if (!sessionService.get('isAuthenticated')) {
