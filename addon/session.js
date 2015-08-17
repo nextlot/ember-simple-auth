@@ -1,5 +1,7 @@
 import Ember from 'ember';
 
+const { on } = Ember;
+
 /**
   __The session provides access to the current authentication state as well as
   any data the authenticator resolved with__ (see
@@ -47,19 +49,7 @@ export default Ember.ObjectProxy.extend(Ember.Evented, {
     [`ApplicationRouteMixin.actions#sessionAuthenticationSucceeded`](#SimpleAuth-ApplicationRouteMixin-sessionAuthenticationSucceeded)
     will be invoked whenever this event is triggered.
 
-    @event sessionAuthenticationSucceeded
-    @public
-  */
-
-  /**
-    Triggered __whenever an attempt to authenticate the session fails__. When
-    the application uses the
-    [`ApplicationRouteMixin` mixin](#SimpleAuth-ApplicationRouteMixin),
-    [`ApplicationRouteMixin.actions#sessionAuthenticationFailed`](#SimpleAuth-ApplicationRouteMixin-sessionAuthenticationFailed)
-    will be invoked whenever this event is triggered.
-
-    @event sessionAuthenticationFailed
-    @param {Object} error The error object; this depends on the authenticator in use, see [SimpleAuth.Authenticators.Base#authenticate](#SimpleAuth-Authenticators-Base-authenticate)
+    @event authenticationSucceeded
     @public
   */
 
@@ -70,31 +60,7 @@ export default Ember.ObjectProxy.extend(Ember.Evented, {
     [`ApplicationRouteMixin.actions#sessionInvalidationSucceeded`](#SimpleAuth-ApplicationRouteMixin-sessionInvalidationSucceeded)
     will be invoked whenever this event is triggered.
 
-    @event sessionInvalidationSucceeded
-    @public
-  */
-
-  /**
-    Triggered __whenever an attempt to invalidate the session fails__. When the
-    application uses the
-    [`ApplicationRouteMixin` mixin](#SimpleAuth-ApplicationRouteMixin),
-    [`ApplicationRouteMixin.actions#sessionInvalidationFailed`](#SimpleAuth-ApplicationRouteMixin-sessionInvalidationFailed)
-    will be invoked whenever this event is triggered.
-
-    @event sessionInvalidationFailed
-    @param {Object} error The error object; this depends on the authenticator in use, see [SimpleAuth.Authenticators.Base#invalidate](#SimpleAuth-Authenticators-Base-invalidate)
-    @public
-  */
-
-  /**
-    Triggered __whenever the server rejects the authorization information
-    passed with a request and responds with status 401__. When the application
-    uses the
-    [`ApplicationRouteMixin` mixin](#SimpleAuth-ApplicationRouteMixin),
-    [`ApplicationRouteMixin.actions#authorizationFailed`](#SimpleAuth-ApplicationRouteMixin-authorizationFailed)
-    will be invoked whenever this event is triggered.
-
-    @event authorizationFailed
+    @event invalidationSucceeded
     @public
   */
 
@@ -187,7 +153,6 @@ export default Ember.ObjectProxy.extend(Ember.Evented, {
         resolve();
       }, (error) => {
         this.clear();
-        this.trigger('sessionAuthenticationFailed', error);
         reject(error);
       });
     });
@@ -267,7 +232,7 @@ export default Ember.ObjectProxy.extend(Ember.Evented, {
     this.updateStore();
     this.endPropertyChanges();
     if (trigger) {
-      this.trigger('sessionAuthenticationSucceeded');
+      this.trigger('authenticationSucceeded');
     }
   },
 
@@ -286,7 +251,7 @@ export default Ember.ObjectProxy.extend(Ember.Evented, {
     this.updateStore();
     this.endPropertyChanges();
     if (trigger) {
-      this.trigger('sessionInvalidationSucceeded');
+      this.trigger('invalidationSucceeded');
     }
   },
 
@@ -330,11 +295,10 @@ export default Ember.ObjectProxy.extend(Ember.Evented, {
   },
 
   /**
-    @method bindToStoreEvents
+    @method _bindToStoreEvents
     @private
   */
-  // TODO: this should run on('init')
-  bindToStoreEvents: Ember.observer('store', function() {
+  _bindToStoreEvents: on('init', function() {
     this.store.on('sessionDataUpdated', (content) => {
       let { authenticator } = (content.secure || {});
       if (!!authenticator) {

@@ -5,9 +5,9 @@ export default function setupSessionRestoration(instance, config) {
   const applicationRoute = container.lookup('route:application');
   const session = container.lookup(config.base.session);
   applicationRoute.reopen({
-    beforeModel(transition) {
-      const superCall = Ember.run.bind(this, this._super, transition);
-      return session.restore().then(superCall, superCall);
+    beforeModel() {
+      const superResult = this._super(...arguments);
+      return session.restore().then(() => superResult, () => superResult);
     }
   });
 }

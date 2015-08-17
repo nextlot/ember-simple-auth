@@ -5,15 +5,12 @@ const { alias, oneWay } = computed;
 
 export default Ember.Service.extend(Ember.Evented, {
   isAuthenticated: oneWay('session.isAuthenticated'),
-  content:         alias('session.content'),
+  data:            alias('session.content'),
 
   _forwardSessionEvents: on('init', function() {
     Ember.A([
-      'sessionAuthenticationSucceeded',
-      'sessionAuthenticationFailed',
-      'sessionInvalidationSucceeded',
-      'sessionInvalidationFailed',
-      'authorizationFailed'
+      'authenticationSucceeded',
+      'invalidationSucceeded'
     ]).forEach((event) => {
       this.get('session').on(event, () => {
         this.trigger(event, ...arguments);
@@ -29,5 +26,10 @@ export default Ember.Service.extend(Ember.Evented, {
   invalidate() {
     const session = this.get('session');
     return session.invalidate.apply(session, arguments);
+  },
+
+  authorize(authorizerFactory, block) {
+    const authorizer = this.container.lookup(authorizerFactory);
+    authorizer.authorize(block);
   }
 });
