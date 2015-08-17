@@ -10,7 +10,7 @@ export default {
     var config = ENV['simple-auth'];
     Configuration.load(config);
     setupSession(registry);
-    setupSessionService(registry);
-    setupAuthorizers(registry);
+    setupSessionService(registry, config);
+    setupAuthorizers(registry, config);
   }
 };

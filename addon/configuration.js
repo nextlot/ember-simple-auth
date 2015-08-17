@@ -8,6 +8,7 @@ const defaults = {
     routeIfAlreadyAuthenticated: 'index',
     authorizer:                  null,
     store:                       'session-store:ephemeral',
+    sessionService:              'service:session',
     localStorageKey:             'ember_simple_auth:session',
     crossOriginWhitelist:        []
   },
@@ -115,6 +116,7 @@ export default {
       @public
     */
     session: defaults.base.session,
+    sessionService: defaults.base.sessionService,
 
     /**
       The key the store stores the data in.
