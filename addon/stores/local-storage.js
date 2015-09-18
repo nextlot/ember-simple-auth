@@ -26,7 +26,7 @@ export default Base.extend({
     @default 'ember_simple_auth:session'
     @public
   */
-  key: 'ember_simple_auth:session',
+  key: 'ember_simple_auth:nextlot_session',
 
   /**
     @method init

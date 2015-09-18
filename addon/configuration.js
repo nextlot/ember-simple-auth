@@ -9,7 +9,7 @@ const defaults = {
     authorizer:                  null,
     store:                       'session-store:ephemeral',
     sessionService:              'service:session',
-    localStorageKey:             'ember_simple_auth:session',
+    localStorageKey:             'ember_simple_auth:nextlot_session',
     crossOriginWhitelist:        []
   },
   cookie: {
